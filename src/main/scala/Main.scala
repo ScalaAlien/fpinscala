@@ -6,14 +6,13 @@ object Main extends App {
   // List(List(1, 2)
   // List(1, 2)
   // List(1)
-  // List(2)
   // List()
 
   def flatten[A](l: List[A]): List[A] = l match {
     case Nil => Nil
     case _ => {
       println(l.head)
-      flatten(l.tail)
+      l.head :: flatten(l.tail)
     }
   }
 
