@@ -1,4 +1,4 @@
-name := "fpin"
+name := "fpinscala"
 
 version := "0.1"
 
