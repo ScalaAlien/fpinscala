@@ -136,12 +136,13 @@ object Chapter3 extends App {
 
   println(flatFilter(List(List(1, 2), List(3, 4)))(_ == List(1, 2)))
 
-  def zipWith[A, B, C](as: List[A], bs: List[B])(f: (A, B) => C): List[C] = {
-    for (i <- 0 until as.length) yield {
-      f(as(i), bs(i))
-    }
-  }.toList
+  def zipWith[A, B, C](as: List[A], bs: List[B])(f: (A, B) => C): List[C] = (as,bs) match {
+    case (Nil, _) => Nil
+    case (_, Nil) => Nil
+    case (h1 :: t1, h2 :: t2) => f(h1,h2) :: zipWith(t1,t2)(f)
+  }
 
+  println("this")
   println(zipWith(List(1, 2, 3), List(4, 5, 6))(_ * _))
 
   def isSubsequenceStartingWithSameHead[A](sup: List[A], sub: List[A]): Boolean = sub match {
