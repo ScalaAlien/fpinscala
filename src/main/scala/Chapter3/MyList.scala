@@ -1,4 +1,4 @@
-object Chapter3 extends App {
+object MyList extends App {
 
   def tail[A](l: List[A]): List[A] = l match {
     case Nil => Nil
