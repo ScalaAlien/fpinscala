@@ -1,0 +1,1 @@
+addSbtPlugin("com.geirsson" % "sbt-scalafmt" % "latest.milestone")
