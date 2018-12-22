@@ -38,7 +38,12 @@ object Main extends App {
       case _ => empty
     }
 
-    def forAll(p: A => Boolean): Boolean = ???
+//    def takeWhile_1(p: A => Boolean): Stream[A] =
+//      foldRight(empty)((a, b) =>
+//        if (p(a)) cons(a,b)
+//        else empty)
+
+    def forAll(p: A => Boolean): Boolean = foldRight(true)((a, b) => p(a) && b)
 
     def headOption: Option[A] = ???
 
