@@ -27,10 +27,10 @@ object Either extends App {
       case Left(e) => Left(e)
     }
 
-//    def traverse[E,A,B](es: List[A])(f: A => Either[E, B]): Either[E, List[B]] = es match {
-//      case Nil => Right(Nil)
-//      case h :: t => f(h) map2 (traverse(t)(f))(_ :: _)
-//    }
+    def traverse[E,A,B](es: List[A])(f: A => Either[E, B]): Either[E, List[B]] = es match {
+      case Nil => Right(Nil)
+      case h :: t => (f(h) map2 traverse(t)(f))(_ :: _)
+    }
 
     def sequence[E,A](es: List[Either[E,A]]): Either[E,List[A]] = es match {
       case Nil => Right(Nil)

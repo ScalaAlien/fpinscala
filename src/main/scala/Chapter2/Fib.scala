@@ -10,5 +10,5 @@ object Fib extends App {
     }
     loop(n, 0, 1)
   }
-  print(fib(6))
+  print(fib(7))
 }

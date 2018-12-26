@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ScalaCompilerConfiguration">
-    <profile name="sbt 1" modules="fpin,fpinscala,fpinscala_8298,fpinscala_9899" />
+    <profile name="sbt 1" modules="fpinscala,fpinscala_3451" />
   </component>
 </project>
