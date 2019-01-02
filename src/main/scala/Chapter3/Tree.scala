@@ -45,7 +45,7 @@ object Tree extends App{
     fold(t)(_ => 0)(_ max _ + 1)
   }
 
-  //def map2[A, B](t: Tree[A])(f: A => B): Tree[B] = {
-  //  fold(t)(x => Leaf(f(x)))(Branch(_, _))
-  //}
+  def map2[A, B](t: Tree[A])(f: A => B): Tree[B] = {
+    fold(t)(x => Leaf(f(x)): Tree[B])(Branch(_, _))
+  }
 }
