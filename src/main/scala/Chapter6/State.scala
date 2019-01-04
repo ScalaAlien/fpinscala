@@ -30,7 +30,7 @@ object State extends App {
 
     def nonNegativeInt(rng: RNG): (Int, RNG) = rng.nextInt match {
       case (i, r) if (i < 0) => (-(i + 1), r)
-      case x                 => x
+      case x => x
     }
 
     def double(rng: RNG): (Double, RNG) = nonNegativeInt(rng) match {
@@ -68,8 +68,7 @@ object State extends App {
       map(nonNegativeInt)(_ / (Int.MaxValue.toDouble + 1))
 
     def map2[A, B, C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = {
-      rng =>
-      {
+      rng => {
         val (a, r1) = ra(rng)
         val (b, r2) = rb(r1)
         (f(a, b), r2)
@@ -98,36 +97,34 @@ object State extends App {
 
     def _map2[A, B, C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] =
       flatMap(ra)(a => _map(rb)(b => f(a, b)))
-
-    case class State[S, +A](run: S => (A, S)) {
-      import State._
-      def map[B](f: A => B): State[S, B] = flatMap(a => unit(f(a)))
-
-      def map2[B, C](sb: State[S, B])(f: (A, B) => C): State[S, C] =
-        flatMap(a => sb.map(b => f(a, b)))
-
-      def flatMap[B](f: A => State[S, B]): State[S, B] = State(s => {
-        val (a, s1) = run(s)
-        f(a).run(s1)
-      })
-    }
-
-    sealed trait Input
-
-    case object Coin extends Input
-
-    case object Turn extends Input
-
-    case class Machine(locked: Boolean, candies: Int, coins: Int)
-
-    object State {
-      type Rand[A] = State[RNG, A]
-
-      def unit[S, A](a: A): State[S, A] = State(s => (a, s))
-
-      def simulateMachine(inputs: List[Input]): State[Machine, (Int, Int)] = ???
-    }
-
   }
+
+  case class State[S, +A](run: S => (A, S)) {
+
+    def map[B](f: A => B): State[S, B] = flatMap(a => unit(f(a)))
+
+    def map2[B, C](sb: State[S, B])(f: (A, B) => C): State[S, C] =
+      flatMap(a => sb.map(b => f(a, b)))
+
+    def flatMap[B](f: A => State[S, B]): State[S, B] = State(s => {
+      val (a, s1) = run(s)
+      f(a).run(s1)
+    })
+  }
+
+  sealed trait Input
+
+  case object Coin extends Input
+
+  case object Turn extends Input
+
+  case class Machine(locked: Boolean, candies: Int, coins: Int)
+
+    type Rand[A] = State[RNG, A]
+
+    def unit[S, A](a: A): State[S, A] = State(s => (a, s))
+
+    def simulateMachine(inputs: List[Input]): State[Machine, (Int, Int)] = ???
+
 
 }
