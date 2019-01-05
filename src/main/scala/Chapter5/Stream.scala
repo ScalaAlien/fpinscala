@@ -163,6 +163,7 @@ object Stream extends App {
 
     def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = ???
   }
+
   Stream(1, 2, 3).scanRight(0)(_ + _).toList
 
 }

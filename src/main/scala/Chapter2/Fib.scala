@@ -8,7 +8,9 @@ object Fib extends App {
       case 1 => a
       case _ => loop(n - 1, b, a + b)
     }
+
     loop(n, 0, 1)
   }
+
   print(fib(7))
 }

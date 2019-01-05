@@ -1,6 +1,6 @@
 package Chapter3
 
-object Tree extends App{
+object Tree extends App {
 
   sealed trait Tree[+A]
 

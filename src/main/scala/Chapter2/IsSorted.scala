@@ -7,9 +7,12 @@ object IsSorted extends App {
     case l if (ordered(l.head, l.tail.head)) => isSorted(l.tail, ordered)
     case _ => false
   }
+
   val nArray = Array(1, 2, 3)
+
   def ordered(a: Int, b: Int): Boolean = {
     a < b
   }
+
   println(isSorted(nArray, ordered))
 }
