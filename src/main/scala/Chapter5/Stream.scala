@@ -1,3 +1,4 @@
+package Chapter5
 object Stream extends App {
 
   import Stream._

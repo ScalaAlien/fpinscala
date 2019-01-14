@@ -1,3 +1,5 @@
+package Chapter3
+
 object MyList extends App {
 
   def tail[A](l: List[A]): List[A] = l match {

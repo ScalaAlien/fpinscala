@@ -1,3 +1,5 @@
+package Chapter6
+
 object State extends App {
 
   trait RNG {
@@ -26,6 +28,11 @@ object State extends App {
       rng => {
         val (a, rng2) = s(rng)
         (f(a), rng2)
+      }
+
+    def boolean(rng: RNG): (Boolean, RNG) =
+      rng.nextInt match {
+        case (i, rng2) => (i % 2 == 0, rng2)
       }
 
     def nonNegativeInt(rng: RNG): (Int, RNG) = rng.nextInt match {
@@ -57,10 +64,10 @@ object State extends App {
     }
 
     def ints(count: Int)(rng: RNG): (List[Int], RNG) = rng.nextInt match {
-      case (i, r) if (count > 0) =>
-        (ints(count - 1)(r) match {
+      case (i, r) if count > 0 =>
+        ints(count - 1)(r) match {
           case (li, r2) => (i :: li, r2)
-        })
+        }
       case _ => (List(), rng)
     }
 
@@ -106,10 +113,24 @@ object State extends App {
     def map2[B, C](sb: State[S, B])(f: (A, B) => C): State[S, C] =
       flatMap(a => sb.map(b => f(a, b)))
 
-    def flatMap[B](f: A => State[S, B]): State[S, B] = State(s => {
-      val (a, s1) = run(s)
-      f(a).run(s1)
-    })
+    def flatMap[B](f: A => State[S, B]): State[S, B] =
+      State(s => {
+        val (a, s1) = run(s)
+        f(a).run(s1)
+      })
+  }
+
+  def sequence[S, A](sas: List[State[S, A]]): State[S, List[A]] = {
+    def go(s: S, actions: List[State[S, A]], acc: List[A]): (List[A], S) =
+      actions match {
+        case Nil => (acc.reverse, s)
+        case h :: t =>
+          h.run(s) match {
+            case (a, s2) => go(s2, t, a :: acc)
+          }
+      }
+
+    State((s: S) => go(s, sas, List()))
   }
 
   sealed trait Input
@@ -125,6 +146,5 @@ object State extends App {
   def unit[S, A](a: A): State[S, A] = State(s => (a, s))
 
   def simulateMachine(inputs: List[Input]): State[Machine, (Int, Int)] = ???
-
 
 }

@@ -1,3 +1,5 @@
+package Chapter4
+
 object Either extends App {
 
   sealed trait Either[+E, +A] {
