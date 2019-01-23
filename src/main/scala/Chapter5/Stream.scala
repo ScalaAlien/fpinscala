@@ -80,10 +80,7 @@ object Stream extends App {
     //      loop(0, 1)
     //    }
 
-    def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = f(z) match {
-      case Some((h, s)) => cons(h, unfold(s)(f))
-      case None => empty
-    }
+
 
     //    val fibs_1 = unfold((0, 1)) { case (h, t) => Some((h, (t, h + t))) }
 
@@ -110,6 +107,9 @@ object Stream extends App {
     }
 
     def takeWhile_2(p: A => Boolean): Stream[A] = unfold(this) { case Cons(h, t) if p(h()) => Some((h(), t())) case _ => None }
+
+    def zip[B](s2: Stream[B]): Stream[(A,B)] =
+      zipWith(s2)((_,_))
 
     def zipWith[B, C](s2: Stream[B])(f: (A, B) => C): Stream[C] = unfold((this, s2)) {
       case (Cons(h1, t1), Cons(h2, t2)) => Some((f(h1(), h2()), (t1(), t2())))
@@ -160,11 +160,14 @@ object Stream extends App {
 
     val ones: Stream[Int] = Stream.cons(1, ones)
 
-    def from(n: Int): Stream[Int] = ???
+    def from(n: Int): Stream[Int] = {
+      cons(n, from(n + 1))
+    }
 
-    def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = ???
+    def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = f(z) match {
+      case Some((h, s)) => cons(h, unfold(s)(f))
+      case None => empty
+    }
   }
-
-  Stream(1, 2, 3).scanRight(0)(_ + _).toList
 
 }
